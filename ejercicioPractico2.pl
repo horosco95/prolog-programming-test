@@ -91,6 +91,30 @@ limitrofes(australia,java).
 limitrofes(australia,borneo).
 limitrofes(australia,chile).
 
+objetivo(amarillo, ocuparContinente(asia)).
+objetivo(amarillo,ocuparPaises(2, americaDelSur)).
+objetivo(blanco, destruirJugador(negro)).
+objetivo(magenta, destruirJugador(blanco)).
+objetivo(negro, ocuparContinente(oceania)).
+objetivo(negro,ocuparContinente(americaDelSur)).
+
+% Relaciona jugador, continente y cantidad de paises.
+/* Este predicado NO DEBERIA estar hecho con hechos, deberia deducirse de los
+anteriores. Pero para hacerlo correctamente todavía no tenemos los conceptos (mas
+adelante se veran), asi que por ahora los dejamos asi */
+cuantosPaisesOcupaEn(amarillo, americaDelSur, 1).
+cuantosPaisesOcupaEn(amarillo, americaDelNorte, 4).
+cuantosPaisesOcupaEn(amarillo, asia, 3).
+cuantosPaisesOcupaEn(amarillo, oceania, 0).
+cuantosPaisesOcupaEn(magenta, americaDelSur, 2).
+cuantosPaisesOcupaEn(magenta, americaDelNorte, 0).
+cuantosPaisesOcupaEn(magenta, asia, 0).
+cuantosPaisesOcupaEn(magenta, oceania, 0).
+cuantosPaisesOcupaEn(negro, americaDelSur, 1).
+cuantosPaisesOcupaEn(negro, americaDelNorte, 0).
+cuantosPaisesOcupaEn(negro, asia, 1).
+cuantosPaisesOcupaEn(negro, oceania, 4).
+
 % Parte A: generador, generador, predicado
 
 loLiquidaron(Jugador):- jugador(Jugador), not(ocupa(_,Jugador,_)).
@@ -104,4 +128,12 @@ seAtrinchero(Jugador):- ocupa(_,Jugador,_), continente(Continente),
     %forall(ocupa(Pais,Jugador,_), estaEn(Continente,Pais)).
 
     %%comandos: swipl aaa.pl
-        
+
+cumpleObjetivos (Jugador):- jugador(Jugador),
+    forall(objetivo(Jugador, Objetivo),puedeCumplirlo(Jugador,Objetivo)).
+
+puedeCumplirlo(Jugador, ocuparContinente(Continente):- ocupaContinente(Jugador,Continente).
+puedeCumplirlo(Jugador, ocuparPaises(Cantidad, Continente):- cuantosPaisesOcupaEn(Jugador,Continente,CantPaises),
+    CantPaises >= Cantidad.
+
+puedeCumplirlo(_,destruirJugador(OtroJugador)).
