@@ -35,8 +35,8 @@ regionesLimitrofe2(UnaRegion,OtraRegion):- perteneceA(UnaRegion,UnaZona), perten
 
 
 % parte B - 
-regiones(Region):-perteneceA(Region,_).
-regionesLejanas(UnaRegion,OtraRegion):- regiones(OtraEnComun),not(regionesLimitrofes(UnaRegion,OtraRegion)),
+region(Region):-perteneceA(Region,_).
+regionesLejanas(UnaRegion,OtraRegion):- region(UnaRegion), not(regionesLimitrofes(UnaRegion,OtraRegion)),
     not((regionesLimitrofes(UnaRegion,OtraEnComun),regionesLimitrofes(OtraEnComun,OtraRegion))),UnaRegion \= OtraRegion.
 
 
@@ -48,10 +48,13 @@ puedeSeguirCon(Camino,Zona):- ultimoElemento(Camino,Ultimo),zonasLimitrofes(Zona
 
 % parte B -
 
-sonConsecutivos(Camino1,[Cabeza2|Cola2]):- puedeSeguirCon(Camino1,Cabeza2).
+sonConsecutivos(Camino1,[Cabeza2|_]):- puedeSeguirCon(Camino1,Cabeza2).
 
 % Punto 6
-
+% parte A - 
+%zonas(Zona):- perteneceA(_,Zona).
+caminoLogico([A,B]):- zonasLimitrofes(A,B).
+caminoLogico([Zona1,Zona2|Cola]):- zonasLimitrofes(Zona1,Zona2), caminoLogico([Zona2|Cola]).
 
 % parte B - 
 caminoSeguro([A,B,C|Cola]):- not(primeras3ZonasMismaRegion([A,B,C])), caminoSeguro([B,C|Cola]).
