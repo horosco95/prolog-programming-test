@@ -74,3 +74,5 @@ criterioCritico(antonEgo, Restaurante):- forall(trabajaEn(Cocinero,Restaurante),
 criterioCritico(cormillot, Restaurante):- forall(experienciaCocinandoPersona(_,Plato,Restaurante,_), esSaludable(Plato)).
 criterioCritico(martiniano, Restaurante):- trabajaEn(Cocinero, Restaurante), 
     not((trabajaEn(OtroCocinero, Restaurante), Cocinero \= OtroCocinero)).
+
+restaurante(Restaurante):- trabajaEn(_,Restaurante).
