@@ -35,3 +35,29 @@ totalPesosCambiados(Persona, Total):- transaccion(Persona, _, _, _),
     sumlist(ListaMonto,Total).
 
 %punto 3
+%cuenta(Persona, Pesos, Banco).
+cuenta(juanCarlos, 100, hete).
+cuenta(juanCarlos, 2000, nejo).
+cuenta(ypf, 10000000, nejo).
+
+%persona(Persona,Situación)
+persona(juanCarlos, laburante(colectivero, rioNegro)).
+persona(romina, laburante(docente,santaFe)).
+persona(julian, juez).
+persona(ypf, empresa(5000)).
+
+
+hizoTransaccionSuperiorALoDeclarado(Persona):- transaccion(Persona,_,Monto,_), cuenta(Persona,Declarado,_), Monto > Declarado.
+
+%sueldo(Persona,Sueldo).
+sueldo(juanCarlos,25000).
+sueldo(romina,23000).
+sueldo(julian,400000).
+
+hizoTransaccionSuperiorAlLimiteSegunSituacion(Persona):- persona(Persona,Situacion),transaccion(Persona,_,Monto,_),limiteDiarioPermitidoSegunSituacion(Persona,Situacion,Limite), Monto > Limite.
+
+limiteDiarioPermitidoSegunSituacion(Persona,laburante(_,_),Limite):- laburaEnBuenosAires(Persona), sueldo(Persona,Sueldo), Limite is 500 + Sueldo/10.
+limiteDiarioPermitidoSegunSituacion(Persona,laburante(_,_),Limite):- not(laburaEnBuenosAires(Persona)), sueldo(Persona,Sueldo), Limite is Sueldo/10.
+limiteDiarioPermitidoSegunSituacion(Persona,empresa(Empleados),Limite):- Limite is 1000 * Empleados.
+
+laburaEnBuenosAires(Persona):- persona(Persona,laburante(_, buenosAires)).
